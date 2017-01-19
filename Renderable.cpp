@@ -1,4 +1,5 @@
 #include "Renderable.hpp"
+//teste
 
 public Renderable::vec shading(vec difuseColor, vec especColor, vector <Light> lights, vec intersect, vec v, vec normal, double p){
 	vec L;
