@@ -79,6 +79,10 @@ void Cena ::readObjects(FILE *arqObjects) {
 	}
 }
 
+double mdc(int h, int w){
+return (w == 0) ? h : mdc(w, h%w);
+}
+
 void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 	FILE *arq = NULL;
 
@@ -98,7 +102,7 @@ void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 	vec normal; 
 	normal << 0.0 << 0.0 << 0.0;
 
-	//fx = mdc(h, w);
+	fx = mdc(h, w);
 
 	fy = fx;
 
@@ -115,7 +119,7 @@ void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 	fprintf(arq,"\n255\n");	
 
 	vec menorNormal;
-	cout << this->objects[0]->getTriangs().size() << endl;
+	//cout << this->objects[0]->getTriangs().size() << endl;
 	for(int j = 0; j < h; j++){
 		fprintf(arq, "\n");
 		for(int  i = 0; i < w; i++){
