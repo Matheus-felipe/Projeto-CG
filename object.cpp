@@ -1,4 +1,4 @@
-#include "Triangle.cpp"
+#include "object.hpp"
 
 Triangle::Triangle(vec pA, vec pB , vec pC, vec pNa, vec pNb, vec pNc){
 			this->a = pA;
@@ -9,7 +9,7 @@ Triangle::Triangle(vec pA, vec pB , vec pC, vec pNa, vec pNb, vec pNc){
 			this->nC = pNc;
 };
 
-Triangle::bool colision(vec origin, vec coordImg, double *distance, vec& normal){
+bool Triangle::colision(vec origin, vec coordImg, double *distance, vec& normal){
 
 			mat A, B, G, T;
 			double mata, beta, gama, t;
@@ -55,11 +55,12 @@ Triangle::bool colision(vec origin, vec coordImg, double *distance, vec& normal)
 				if(cosTetha >= 0.0 && cosTetha < 1.0)
 					normal = -normal;
 				*/
+				//cout << "colidiu" << endl;
 				return true;
 			}
 }
 
-Triangle::vec calcNormal(){
+vec Triangle::calcNormal(){
 			/*
 			vec AB;
 			vec AC;
@@ -77,15 +78,71 @@ Triangle::vec calcNormal(){
 			return n;
 }
 
-Triangle::void setColors(vec pDifuseColor, vec pEspecColor){
+void Triangle::setColors(vec pDifuseColor, vec pEspecColor){
 	this->difuseColor = pDifuseColor;
 	this->especColor = pEspecColor;
 }
 
-Triangle::vec getDifuseColor(){
+vec Triangle::shading(vector <Light> lights, vec intersect, vec v, vec normal){
+	vec L;
+	L << 0.0 << 0.0 << 0.0;
+	vec h;
+	vec Li;
+	vec nLi;
+	vec nH;
+	double max1, max2;
+	normalise(v);
+
+	for(int i = 0; i < lights.size(); i++){
+		Li = (lights[i].getOrigin() - intersect);
+		h = v + Li;
+		normalise(h);
+		normalise(Li);
+		max1 = (dot(normal,Li) > 0.0) ? dot(normal,Li) : 0.0;
+		max2 = (dot(normal,h) > 0.0) ? dot(normal,h) : 0.0; 
+		L += (((this->difuseColor%lights[i].getIntensity()) * max1) + ((this->especColor%lights[i].getIntensity())) * pow(max2,this->p));
+	}
+
+	for(int j = 0; j < 3; j++){
+		if(L[j] > 255.0){
+			L[j] = 255.0;
+		}
+	}
+
+	return L;
+};
+
+vec Triangle::getDifuseColor(){
 	return this->difuseColor;
 }
 
-Triangle::vec getEspecColor(){
+vec Triangle::getEspecColor(){
 	return this->especColor;
 }
+
+
+void Object::addVertices(vec v){
+	this->vertices.push_back(v);
+}
+
+void Object::addNormais(vec n){
+	this->normais.push_back(n);
+}
+
+void Object::addTriang(Triangle *triang){
+	this->triangs.push_back(triang);
+}
+
+vec Object::getVertice(int position){
+	return this->vertices[position -1];
+}
+
+vec Object::getNormal(int position){
+	return this->normais[position - 1];
+}
+
+vector <Triangle *> Object::getTriangs(){
+	return this->triangs;
+}
+
+
