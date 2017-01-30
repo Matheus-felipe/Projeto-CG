@@ -90,7 +90,7 @@ void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 
 	int quantObjects = this->objects.size();
 
-	int positionObject;
+	vector <Triangle *> allTriangles;
 
 	double fx, fy;
 
@@ -119,7 +119,13 @@ void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 	fprintf(arq,"\n255\n");	
 
 	vec menorNormal;
-	//cout << this->objects[0]->getTriangs().size() << endl;
+	//cout << this->objects[0]->getTriangs().size() << endl;+
+	for(int m = 0; m < quantObjects; m++){
+		for(int d = 0; d < this->objects[m]->getTriangs().size(); d++){
+			allTriangles.push_back(this->objects[m]->getTriangs()[d]);
+		}
+	}
+
 	for(int j = 0; j < h; j++){
 		fprintf(arq, "\n");
 		for(int  i = 0; i < w; i++){
@@ -130,11 +136,12 @@ void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 
 			colidiu = false;
  			
-			for(int l = 0; l < this->objects[0]->getTriangs().size(); l++){
+			for(int l = 0; l < allTriangles.size(); l++){
 				//cout << "Entrou dentro desse" << endl;				
-				if(this->objects[0]->getTriangs()[l]->colision(origin, director, &distance,normal)){
+				if(allTriangles[l]->colision(origin, director, &distance,normal)){
 				
 					colidiu = true;
+
 					if(distance < distanceMenor){
 						distanceMenor = distance;
 						p = l;
@@ -150,7 +157,7 @@ void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 				vec v;
 				v = -director;
 				vec tempColor;
-				tempColor = this->objects[0]->getTriangs()[p]->shading(lights, intersect, v, menorNormal);
+				tempColor = allTriangles[p]->shading(lights, intersect, v, menorNormal);
 				fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
 			}else {
 				//cout << "nao colidiu" << endl;

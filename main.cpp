@@ -15,9 +15,14 @@ int main(int argc, char **argv) {
 	lights.push_back(light);
 	arq = fopen(argv[1], "r");
 
+	if(argc < 2){
+		cout << "Parametros necessarios : Programa + Nome do arquivo" << endl;
+		return 1;
+	}
+
 	if (arq == NULL) {
 		cout << "Arquivo nao existe!" << endl;
-		return 1;
+		return 2;
 	}
 
 	
