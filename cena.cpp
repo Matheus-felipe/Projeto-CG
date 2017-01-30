@@ -22,8 +22,8 @@ void Cena ::readObjects(FILE *arqObjects) {
 	vec dColor;
 	vec eColor;
 
-	dColor << 255.0 << 0.0 << 0.0;
-	eColor << 255.0 << 0.0 << 0.0;
+	dColor << 51.0 << 51.0 << 51.0;
+	eColor << 51.0 << 51.0 << 51.0;
 
 	Object *objt = NULL;
 
@@ -100,7 +100,7 @@ void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 
 	vec matrizPixel;
 	vec normal; 
-	normal << 0.0 << 0.0 << 0.0;
+	normal << 0.0 << 0.0 << 1.0;
 
 	fx = mdc(h, w);
 

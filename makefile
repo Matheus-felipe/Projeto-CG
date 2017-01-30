@@ -1,5 +1,5 @@
 rayTracer: main.cpp 
-	g++ -std=c++11 -o $@ main.cpp Object.cpp Cena.cpp Light.cpp -O2 -larmadillo
+	g++ -std=c++11 -o $@ main.cpp cena.cpp light.cpp object.cpp -o rayTracer -larmadillo
 
 clean:
-$(RM) rayTracer
+	$(RM) rayTracer

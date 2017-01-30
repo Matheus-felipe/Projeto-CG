@@ -18,17 +18,17 @@ bool Triangle::colision(vec origin, vec coordImg, double *distance, vec& normal)
 			  << a[1]-b[1] << a[1]-c[1] << coordImg[1] << endr
 			  << a[2]-b[2] << a[2]-c[2] << coordImg[2];
 
-			B << a[0]-coordImg[0] << a[0]-c[0] << coordImg[0] << endr
-			  << a[1]-coordImg[1] << a[1]-c[1] << coordImg[1] << endr
-			  << a[2]-coordImg[2] << a[2]-c[2] << coordImg[2];
+			B << a[0]-origin[0] << a[0]-c[0] << coordImg[0] << endr
+			  << a[1]-origin[1] << a[1]-c[1] << coordImg[1] << endr
+			  << a[2]-origin[2] << a[2]-c[2] << coordImg[2];
 
-			G << a[0]-b[0] << a[0]-coordImg[0] << coordImg[0] << endr
-			  << a[1]-b[1] << a[1]-coordImg[1] << coordImg[1] << endr
-			  << a[2]-b[2] << a[2]-coordImg[2] << coordImg[2];
+			G << a[0]-b[0] << a[0]-origin[0] << coordImg[0] << endr
+			  << a[1]-b[1] << a[1]-origin[1] << coordImg[1] << endr
+			  << a[2]-b[2] << a[2]-origin[2] << coordImg[2];
 
-			T << a[0]-b[0] << a[0]-c[0] << a[0]-coordImg[0] << endr
-		      << a[1]-b[1] << a[1]-c[1] << a[1]-coordImg[1] << endr
-			  << a[2]-b[2] << a[2]-c[2] << a[2]-coordImg[2];
+			T << a[0]-b[0] << a[0]-c[0] << a[0]-origin[0] << endr
+		      << a[1]-b[1] << a[1]-c[1] << a[1]-origin[1] << endr
+			  << a[2]-b[2] << a[2]-c[2] << a[2]-origin[2];
 
 			mata = det(A);
 			this->beta = det(B)/mata;
@@ -103,9 +103,12 @@ vec Triangle::shading(vector <Light> lights, vec intersect, vec v, vec normal){
 		L += (((this->difuseColor%lights[i].getIntensity()) * max1) + ((this->especColor%lights[i].getIntensity())) * pow(max2,this->p));
 	}
 
-	for(int j = 0; j < 3; j++){
+	for(int j = 0; j < 3; j++) {
 		if(L[j] > 255.0){
 			L[j] = 255.0;
+		}
+		if(L[j] < 0.0) {
+			L[j] = 0.0;
 		}
 	}
 
