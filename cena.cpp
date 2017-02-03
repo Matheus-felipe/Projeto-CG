@@ -7,7 +7,7 @@ void Cena::addObjects(Object *obj){
 
 void Cena ::readObjects(FILE *arqObjects) {
 
-	char linha[256], tipo[16], nomeMaterial[32];;
+	char linha[256], tipo[16], nomeMaterial[32];
 	int qtdVertices = 0;
 	int qtdVetoresNormais = 0;
 	int vert1, vert2, vert3;
@@ -84,6 +84,22 @@ return (w == 0) ? h : mdc(w, h%w);
 }
 
 void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
+	String log = "Renderizando.";
+	char dot = '.';
+	int counter = 1;
+	
+	if(counter == 3){
+		println("Renderizando.");
+		counter = 1;
+	} else if(counter == 1){
+		print(dot);
+		counter++;
+	} else if(counter == 2){
+		print(dot);
+		counter++;
+	}
+
+
 	FILE *arq = NULL;
 
 	int p;
