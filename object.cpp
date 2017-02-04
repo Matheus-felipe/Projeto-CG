@@ -1,5 +1,48 @@
 #include "object.hpp"
 
+Sphere::Sphere(double pRay, vec pCenter, vec pDifuseColor, vec pEspecColor){
+		this->ray = pRay;
+		this->center = pCenter;
+		this->difuseColor = pDifuseColor;
+		this->especColor = pEspecColor;
+};
+
+vec Sphere::getDifuseColor(){
+	return this->difuseColor;
+};
+
+vec Sphere::getEspecColor(){
+	return this->difuseColor;
+};
+
+bool Sphere::colision(vec origin, vec coordImg, double *distance, vec& normal){
+		double a,b,c;
+		double delta = 0.0;
+		double t1,t2;
+
+		vec distOrgia;
+		distOrgia = origin - this->center;
+
+		a = cdot(coordImg, coordImg);
+		b = cdot((2*coordImg), distOrgia);
+		c = cdot(distOrgia, distOrgia) - (this->ray * this->ray);
+
+		delta = (b*b) - 4*a*c;
+
+		normal = (coordImg - this->center) / this->ray;
+
+		t1 = (-b + sqrt(delta)) / a*a;
+		t2 = (-b - sqrt(delta)) / a*a;
+
+		(*distance) = (t1 < t2) ? t1 : t2;  
+
+		if(delta < 0){
+			return false;
+		}else{
+			return true;
+		}
+};	
+
 Triangle::Triangle(vec pA, vec pB , vec pC, vec pNa, vec pNb, vec pNc){
 			this->a = pA;
 			this->b = pB;

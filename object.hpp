@@ -12,7 +12,26 @@
 using namespace std;
 using namespace arma;
 
-class Triangle {
+class Renderable{
+
+};
+
+class Sphere : public Renderable {
+	private:
+		double ray;
+		vec center;
+		vec difuseColor;
+		vec especColor;
+	public:
+
+	Sphere(double, vec, vec, vec);
+
+	bool colision(vec, vec, double *, vec&);
+	vec getDifuseColor();
+	vec getEspecColor();
+};
+
+class Triangle : public Renderable{
 	private:
 		vec difuseColor;
 		vec especColor;
