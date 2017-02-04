@@ -7,7 +7,7 @@ void Cena::addObjects(Object *obj) {
 
 void Cena :: readObjects(FILE *arqObjects) {
 
-	char linha[256], tipo[16], nomeMaterial[32];;
+	char linha[256], tipo[16], nomeMaterial[32];
 	int qtdVertices = 0;
 	int qtdVetoresNormais = 0;
 	int vert1, vert2, vert3;
