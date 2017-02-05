@@ -22,6 +22,6 @@ Projeto referente à disciplina de Computação Gráfica da Universidade Estadua
 6. e -> Adicionar esfera, pede como parâmetros as coordenadas do centro e o seu raio;
 
 ### Contribuidores
-      	Matheus Ferreira
+	Matheus Ferreira
 	Dayvid Silva
 	Lucas Feijó
