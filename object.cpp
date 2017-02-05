@@ -59,18 +59,18 @@ bool Sphere::colision(vec origin, vec coordImg, double *distance, vec& normal){
 		b = cdot((2*coordImg), distOrgia);
 		c = cdot(distOrgia, distOrgia) - (this->ray * this->ray);
 
-		delta = (b*b) - 4*a*c;
-
-		normal = (coordImg - this->center) / this->ray;
-
-		t1 = (-b + sqrt(delta)) / a*a;
-		t2 = (-b - sqrt(delta)) / a*a;
-
-		(*distance) = (t1 < t2) ? t1 : t2;  
+		delta = (b*b) - 4*a*c; 
 
 		if(delta < 0){
 			return false;
 		}else{
+			normal = (coordImg - this->center) / this->ray;
+
+			t1 = (-b + sqrt(delta)) / 2*a;
+			t2 = (-b - sqrt(delta)) / 2*a;
+
+			(*distance) = (t1 < t2) ? t1 : t2; 
+			
 			return true;
 		}
 };	

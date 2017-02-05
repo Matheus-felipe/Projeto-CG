@@ -88,8 +88,6 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 	cout << "renderizando..." << endl;
 	int p;
 
-	int quantObjects = this->objects.size();
-
 	vector <Triangle *> allTriangles;
 
 	double fx, fy;
@@ -130,6 +128,7 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 			director = k * matrizPixel;
 
 			colidiu = false;
+			//Object objtAtual = NULL;
  			
 			for(int l = 0; l < this->objects.size(); l++){
 				//cout << "Entrou dentro desse" << endl;				
@@ -145,18 +144,65 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 				}	
 			}
 
-			if(colidiu) {
-				//cout << "colidiu" << endl;
-				vec intersect;
-				intersect = director + (director*distanceMenor);
-				vec v;
-				v = -director;
-				vec tempColor;
-				tempColor = this->objects[p]->shading(lights, intersect, v, menorNormal);
-				fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
-			}else {
+			//objtAtual = objects[p];
+			vector <Light> lightsIntersected;
+			vec originIntersect;
+			vec intersect;
+			bool sombra = false;
+			int quantObjects = 0;
+
+			for (int j = 0; j < lights.size(); j++) { //verificando todas as luzes
+
+				originIntersect = origin+director*distanceMenor;
+
+				//originIntersect.print();
+
+				intersect = lights[j].getOrigin()-originIntersect;
+
+				//normalise(intersect);
+
+				//intersect.print();
+				
+				for (int i = 0; i < this->objects.size(); i++) { // verificando todos os objetos
+					//cout << "mateo viado" << endl;
+					if (this->objects[i]->colision(originIntersect, intersect, &distance, normal)) { // verifica se o raio de interseção
+						
+						sombra = true;
+
+						if (distance == 0.0) {
+							continue;
+						}
+
+						++quantObjects;
+						break;
+					}
+
+					sombra = false;
+				}
+
+
+			
+			}
+
+			if (quantObjects == lights.size()) {
+				//sombra
+			}
+
+			/*
+	
+
+							vec v;
+							v = -director;
+							tempColor += this->objects[p]->shading(lights[j], originIntersect, v, menorNormal);	
+							
+							fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
+
+
+			*/
+
+			else {
 				//cout << "nao colidiu" << endl;
-				fprintf(arq, "0 0 0 ");
+				fprintf(arq, "255 255 255 ");
 			}
 		}
 	}
