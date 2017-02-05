@@ -15,7 +15,7 @@ using namespace arma;
 class Renderable{
 	public:
 		virtual bool colision(vec, vec, double *, vec&) = 0;
-		virtual vec shading(vector <Light> , vec , vec , vec) = 0;
+		virtual vec shading(Light light , vec , vec , vec) = 0;
 };
 
 class Sphere : public Renderable {
@@ -32,7 +32,7 @@ class Sphere : public Renderable {
 	bool colision(vec, vec, double *, vec& normal);
 	vec getDifuseColor();
 	vec getEspecColor();
-	vec shading(vector <Light> lights, vec intersect, vec v, vec normal);
+	vec shading(Light light, vec intersect, vec v, vec normal);
 };
 
 class Triangle : public Renderable {
@@ -55,7 +55,7 @@ class Triangle : public Renderable {
 		bool colision(vec origin, vec coordImg, double *distance, vec& normal);
 		vec calcNormal();
 		void setColors(vec pDifuseColor, vec pEspecColor);
-		vec shading(vector <Light> lights, vec intersect, vec v, vec normal);
+		vec shading(Light light, vec intersect, vec v, vec normal);
 		vec getDifuseColor();
 		vec getEspecColor();
 };

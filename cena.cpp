@@ -119,6 +119,7 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 	vec menorNormal;
 	//cout << this->objects[0]->getTriangs().size() << endl;
 	
+
 	for(int j = 0; j < h; j++){
 		fprintf(arq, "\n");
 		for(int  i = 0; i < w; i++){
@@ -144,48 +145,48 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 				}	
 			}
 
+			if(colidiu){
 			//objtAtual = objects[p];
-			vector <Light> lightsIntersected;
 			vec originIntersect;
 			vec intersect;
-			bool sombra = false;
 			int quantObjects = 0;
-
+			originIntersect = origin+(director*distanceMenor);
+			vec tempColor;
+			tempColor << 0.0 << 0.0 << 0.0;
 			for (int j = 0; j < lights.size(); j++) { //verificando todas as luzes
 
-				originIntersect = origin+director*distanceMenor;
-
-				//originIntersect.print();
-
-				intersect = lights[j].getOrigin()-originIntersect;
-
-				//normalise(intersect);
-
-				//intersect.print();
+				intersect = (lights[j].getOrigin())-originIntersect;
+				bool sombra = false;
 				
 				for (int i = 0; i < this->objects.size(); i++) { // verificando todos os objetos
-					//cout << "mateo viado" << endl;
+					
 					if (this->objects[i]->colision(originIntersect, intersect, &distance, normal)) { // verifica se o raio de interseção
-						
-						sombra = true;
 
-						if (distance == 0.0) {
-							continue;
+						if (distance == 0.0 || distance < 0.0) {
+							 continue;
 						}
 
-						++quantObjects;
+                        sombra = true;
+                        ++quantObjects;
 						break;
 					}
 
-					sombra = false;
 				}
 
-
-			
+				if(sombra == false){
+							vec v;
+							v = -director;
+							tempColor += this->objects[p]->shading(lights[j], originIntersect, v, menorNormal);	
+				}
 			}
 
 			if (quantObjects == lights.size()) {
 				//sombra
+				cout << "Dayvid gay" << endl;
+				fprintf(arq, "0 0 0 ");
+
+			}else{
+				fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
 			}
 
 			/*
@@ -200,10 +201,10 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 
 			*/
 
-			else {
+			}else {
 				//cout << "nao colidiu" << endl;
 				fprintf(arq, "255 255 255 ");
 			}
 		}
-	}
+	}	
 }

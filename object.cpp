@@ -7,7 +7,7 @@ Sphere::Sphere(double pRay, vec pCenter, vec pDifuseColor, vec pEspecColor){
 		this->especColor = pEspecColor;
 };
 
-vec Sphere::shading(vector <Light> lights, vec intersect, vec v, vec normal){
+vec Sphere::shading(Light light, vec intersect, vec v, vec normal){
 	vec L;
 	L << 0.0 << 0.0 << 0.0;
 	vec h;
@@ -17,15 +17,14 @@ vec Sphere::shading(vector <Light> lights, vec intersect, vec v, vec normal){
 	double max1, max2;
 	normalise(v);
 
-	for(int i = 0; i < lights.size(); i++){
-		Li = (lights[i].getOrigin() - intersect);
+		Li = (light.getOrigin() - intersect);
 		h = v + Li;
 		normalise(h);
 		normalise(Li);
 		max1 = (dot(normal,Li) > 0.0) ? dot(normal,Li) : 0.0;
 		max2 = (dot(normal,h) > 0.0) ? dot(normal,h) : 0.0; 
-		L += (((this->difuseColor%lights[i].getIntensity()) * max1) + ((this->especColor%lights[i].getIntensity())) * pow(max2,this->p));
-	}
+		L = (((this->difuseColor%light.getIntensity()) * max1) + ((this->especColor%light.getIntensity())) * pow(max2,this->p));
+	
 
 	for(int j = 0; j < 3; j++) {
 		if(L[j] > 255.0){
@@ -165,7 +164,7 @@ void Triangle::setColors(vec pDifuseColor, vec pEspecColor){
 	this->especColor = pEspecColor;
 }
 
-vec Triangle::shading(vector <Light> lights, vec intersect, vec v, vec normal){
+vec Triangle::shading(Light light, vec intersect, vec v, vec normal){
 	vec L;
 	L << 0.0 << 0.0 << 0.0;
 	vec h;
@@ -175,15 +174,14 @@ vec Triangle::shading(vector <Light> lights, vec intersect, vec v, vec normal){
 	double max1, max2;
 	normalise(v);
 
-	for(int i = 0; i < lights.size(); i++){
-		Li = (lights[i].getOrigin() - intersect);
+
+		Li = (light.getOrigin() - intersect);
 		h = v + Li;
 		normalise(h);
 		normalise(Li);
 		max1 = (dot(normal,Li) > 0.0) ? dot(normal,Li) : 0.0;
 		max2 = (dot(normal,h) > 0.0) ? dot(normal,h) : 0.0; 
-		L += (((this->difuseColor%lights[i].getIntensity()) * max1) + ((this->especColor%lights[i].getIntensity())) * pow(max2,this->p));
-	}
+		L = (((this->difuseColor%light.getIntensity()) * max1) + ((this->especColor%light.getIntensity())) * pow(max2,this->p));
 
 	for(int j = 0; j < 3; j++) {
 		if(L[j] > 255.0){
