@@ -22,4 +22,4 @@ Projeto referente à disciplina de Computação Gráfica da Universidade Estadua
 
 ### Screenshot
 
-![screen shot](https://drive.google.com/file/d/0B9Q50XAtzroHVWRkTGNaWkJpWkk/view)
+![alt tag](https://drive.google.com/file/d/0B9Q50XAtzroHVWRkTGNaWkJpWkk/view)
