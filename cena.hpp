@@ -3,14 +3,14 @@
 
 #include "object.hpp"
 
-class Cena{
+class Cena {
 	private:
 		vector <Object *> objects;
 	public:
 		//vector getObjects();
-		void addObjects(Object *);
-		void readObjects(FILE *arq);	
-		void printIMG(vec, int, int , vector <Light>);	
+		//void addObjects(Object *);
+		void readObjects(FILE *arq);
+		void renderizar(vec, int, int , vector <Light>, char *);	
 };
 
 #endif	

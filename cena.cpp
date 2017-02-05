@@ -1,9 +1,10 @@
 #include "cena.hpp"
 
-
+/*
 void Cena::addObjects(Object *obj) {
 	this->objects.push_back(obj);
 }
+*/ // método desnecessário!
 
 void Cena :: readObjects(FILE *arqObjects) {
 
@@ -18,9 +19,11 @@ void Cena :: readObjects(FILE *arqObjects) {
 	vector <Object *> objects;
 	vec vertice(3);
 	vec norm(3);
-	vec dColor;
-	vec eColor;
+	vec dColor(3);
+	vec eColor(3);
 	vector <vec> colorFace;
+
+	//default
 	dColor << 51.0 << 51.0 << 51.0;
 	eColor << 51.0 << 51.0 << 51.0;
 
@@ -33,8 +36,8 @@ void Cena :: readObjects(FILE *arqObjects) {
 		if (!strcmp(tipo, "o")) {
 			++quant_obj;
 			objt = new Object();
-			addObjects(objt);
-			cout << "obj" << endl;
+			this->objects.push_back(objt);
+			//cout << "obj" << endl;
 		}
 		else if (!strcmp(tipo, "v")) {
 			sscanf(linha, "%*s %lf %lf %lf", &vertice[0], &vertice[1], &vertice[2]);
@@ -64,26 +67,12 @@ void Cena :: readObjects(FILE *arqObjects) {
 		else if (strcmp(tipo, "usemtl") == 0) {
 			sscanf(linha, "%s %s", tipo, nomeMaterial);
 		}
-	}
-}
-
-vector <vec> Cena :: readMaterials(FILE *arquivoMateriais) {
-	char linha[256], tipo[16], nomeMaterial[32];
-	vec cor(3);
-	vector <vec> colorCoords;
-
-	while (fgets(linha, sizeof(linha), arquivoMateriais)) {
-
-		sscanf(linha, "%s ", tipo);
-
-		if (!strcmp(tipo, "newmtl")) {
-			sscanf(linha, "%s %s", tipo, nomeMaterial);
+		else if (strcmp(tipo, "dColor") == 0) {
+			sscanf(linha, "%*s %lf %lf %lf", &dColor[0], &dColor[1], &dColor[2]);
 		}
-		else if (!strcmp(tipo, "Kd")) {
-			sscanf(linha, "%*s %lf %lf %lf", &cor[0], &cor[1], &cor[2]);
-			colorCoords.push_back(cor);
+		else if (strcmp(tipo, "eColor") == 0) {
+			sscanf(linha, "%*s %lf %lf %lf", &eColor[0], &eColor[1], &eColor[2]);
 		}
-		return colorCoords;
 	}
 }
 
@@ -91,7 +80,7 @@ double mdc(int h, int w){
 return (w == 0) ? h : mdc(w, h%w);
 }
 
-void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
+void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nomeArq){
 	FILE *arq = NULL;
 	cout << "renderizando..." << endl;
 	int p;
@@ -122,7 +111,7 @@ void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 	  << 0 << ((-1)/fy) << (h/(2*fy)) << endr
 	  << 0 << 0 << 1;
 
-	arq = fopen("img.ppm", "w");
+	arq = fopen(nomeArq, "w");
 	fprintf(arq,"P3 \n%d %d", w, h);
 	fprintf(arq,"\n255\n");	
 
@@ -169,7 +158,7 @@ void Cena::printIMG(vec origin, int w, int h, vector <Light> lights){
 				fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
 			}else {
 				//cout << "nao colidiu" << endl;
-				fprintf(arq, "255 255 255 ");
+				fprintf(arq, "30 30 30 ");
 			}
 		}
 	}

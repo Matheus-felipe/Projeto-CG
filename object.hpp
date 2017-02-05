@@ -31,7 +31,7 @@ class Sphere : public Renderable {
 	vec getEspecColor();
 };
 
-class Triangle : public Renderable{
+class Triangle : public Renderable {
 	private:
 		vec difuseColor;
 		vec especColor;
@@ -55,7 +55,7 @@ class Triangle : public Renderable{
 		vec getEspecColor();
 };
 
-class Object{
+class Object {
 	private:
 		vector <vec> vertices;
 		vector <vec> normais;
