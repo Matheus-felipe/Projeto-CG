@@ -5,11 +5,12 @@
 
 class Cena {
 	private:
-		vector <Object *> objects;
+		vector <Renderable *> objects;
+		
 	public:
 		//vector getObjects();
-		//void addObjects(Object *);
-		void readObjects(FILE *arq);
+		void addObjects(Renderable *);
+		vector <Object*>readObjects(FILE *arq);
 		void renderizar(vec, int, int , vector <Light>, char *);	
 };
 

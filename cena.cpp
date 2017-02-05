@@ -1,12 +1,11 @@
 #include "cena.hpp"
 
-/*
-void Cena::addObjects(Object *obj) {
-	this->objects.push_back(obj);
-}
-*/ // método desnecessário!
 
-void Cena :: readObjects(FILE *arqObjects) {
+void Cena::addObjects(Renderable* rend) {
+	this->objects.push_back(rend);
+}
+
+vector <Object*>Cena::readObjects(FILE *arqObjects) {
 
 	char linha[256], tipo[16], nomeMaterial[32];
 	int qtdVertices = 0;
@@ -15,8 +14,9 @@ void Cena :: readObjects(FILE *arqObjects) {
 	int norm1, norm2, norm3;
 	int rolinha;
 	int quant_obj = -1;
+	vector <Object*> objects;
 	
-	vector <Object *> objects;
+	vector <Object *> objs;
 	vec vertice(3);
 	vec norm(3);
 	vec dColor(3);
@@ -35,8 +35,9 @@ void Cena :: readObjects(FILE *arqObjects) {
 
 		if (!strcmp(tipo, "o")) {
 			++quant_obj;
+				
 			objt = new Object();
-			this->objects.push_back(objt);
+			objs.push_back(objt);
 			//cout << "obj" << endl;
 		}
 		else if (!strcmp(tipo, "v")) {
@@ -74,6 +75,8 @@ void Cena :: readObjects(FILE *arqObjects) {
 			sscanf(linha, "%*s %lf %lf %lf", &eColor[0], &eColor[1], &eColor[2]);
 		}
 	}
+
+	return objs;
 }
 
 double mdc(int h, int w){
@@ -116,13 +119,8 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 	fprintf(arq,"\n255\n");	
 
 	vec menorNormal;
-	//cout << this->objects[0]->getTriangs().size() << endl;+
-	for(int m = 0; m < quantObjects; m++){
-		for(int d = 0; d < this->objects[m]->getTriangs().size(); d++){
-			allTriangles.push_back(this->objects[m]->getTriangs()[d]);
-		}
-	}
-
+	//cout << this->objects[0]->getTriangs().size() << endl;
+	
 	for(int j = 0; j < h; j++){
 		fprintf(arq, "\n");
 		for(int  i = 0; i < w; i++){
@@ -133,9 +131,9 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 
 			colidiu = false;
  			
-			for(int l = 0; l < allTriangles.size(); l++){
+			for(int l = 0; l < this->objects.size(); l++){
 				//cout << "Entrou dentro desse" << endl;				
-				if(allTriangles[l]->colision(origin, director, &distance,normal)){
+				if(this->objects[l]->colision(origin, director, &distance,normal)){
 				
 					colidiu = true;
 
@@ -154,11 +152,11 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 				vec v;
 				v = -director;
 				vec tempColor;
-				tempColor = allTriangles[p]->shading(lights, intersect, v, menorNormal);
+				tempColor = this->objects[p]->shading(lights, intersect, v, menorNormal);
 				fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
 			}else {
 				//cout << "nao colidiu" << endl;
-				fprintf(arq, "30 30 30 ");
+				fprintf(arq, "0 0 0 ");
 			}
 		}
 	}

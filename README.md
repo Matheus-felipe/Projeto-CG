@@ -15,11 +15,13 @@ Projeto referente à disciplina de Computação Gráfica da Universidade Estadua
 ### Sobre o arquivo de configurações
 
 1. c -> câmera, pede como parâmetros as coordenadas de sua posição na cena
-2. l -> Luz, pede como parâmetro as coordenadas de sua posição na cena e a sua intensidade
-3. s -> tamanho da imagem em pixels, pede como parâmetro o valor do eixo x, em pixels, e o valor do eixo y
-4. o -> arquivo .obj que vai ser lido, pede como parâmetro o local que o arquivo vai estar
-5. a -> arquivo de saida, pede como parâmetro o nome da imagem que vai ser gerada
+2. l -> Luz, pede como parâmetro as coordenadas de sua posição na cena e a sua intensidade;
+3. s -> tamanho da imagem em pixels, pede como parâmetro o valor do eixo x, em pixels, e o valor do eixo y;
+4. o -> arquivo .obj que vai ser lido, pede como parâmetro o local que o arquivo vai estar;
+5. a -> arquivo de saida, pede como parâmetro o nome da imagem que vai ser gerada;
+6. e -> Adicionar esfera, pede como parâmetros as coordenadas do centro e o seu raio;
 
-### Screenshot
-
-![alt tag](https://drive.google.com/file/d/0B9Q50XAtzroHVWRkTGNaWkJpWkk/view)
+### Contribuidores
+      	Matheus Ferreira
+	Dayvid Silva
+	Lucas Feijó

@@ -7,6 +7,38 @@ Sphere::Sphere(double pRay, vec pCenter, vec pDifuseColor, vec pEspecColor){
 		this->especColor = pEspecColor;
 };
 
+vec Sphere::shading(vector <Light> lights, vec intersect, vec v, vec normal){
+	vec L;
+	L << 0.0 << 0.0 << 0.0;
+	vec h;
+	vec Li;
+	vec nLi;
+	vec nH;
+	double max1, max2;
+	normalise(v);
+
+	for(int i = 0; i < lights.size(); i++){
+		Li = (lights[i].getOrigin() - intersect);
+		h = v + Li;
+		normalise(h);
+		normalise(Li);
+		max1 = (dot(normal,Li) > 0.0) ? dot(normal,Li) : 0.0;
+		max2 = (dot(normal,h) > 0.0) ? dot(normal,h) : 0.0; 
+		L += (((this->difuseColor%lights[i].getIntensity()) * max1) + ((this->especColor%lights[i].getIntensity())) * pow(max2,this->p));
+	}
+
+	for(int j = 0; j < 3; j++) {
+		if(L[j] > 255.0){
+			L[j] = 255.0;
+		}
+		if(L[j] < 0.0) {
+			L[j] = 0.0;
+		}
+	}
+
+	return L;
+};
+
 vec Sphere::getDifuseColor(){
 	return this->difuseColor;
 };
@@ -52,6 +84,12 @@ Triangle::Triangle(vec pA, vec pB , vec pC, vec pNa, vec pNb, vec pNc){
 			this->nC = pNc;
 };
 
+Triangle::Triangle(vec pA, vec pB , vec pC){
+			this->a = pA;
+			this->b = pB;
+			this->c = pC;
+};
+
 bool Triangle::colision(vec origin, vec coordImg, double *distance, vec& normal){
 
 			mat A, B, G, T;
@@ -92,12 +130,13 @@ bool Triangle::colision(vec origin, vec coordImg, double *distance, vec& normal)
 				
 				//vec v = (origin + (t * coordImg));
 				//normalise(v);
-				normal = calcNormal();
 				/*
 				double cosTetha = dot(-v, normal);
 				if(cosTetha >= 0.0 && cosTetha < 1.0)
 					normal = -normal;
 				*/
+
+				normal = calcNormal();
 				//cout << "colidiu" << endl;
 				return true;
 			}

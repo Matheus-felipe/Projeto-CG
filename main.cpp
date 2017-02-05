@@ -5,14 +5,24 @@ int main(int argc, char **argv) {
 	char type;
 	char nomeArqObj[32];
 	char nomeArqSaida[32];
+	double sphereRay = 0.0;
 	Cena *cena = new Cena();
 	vector <Light> lights;
+	vector <Object*> objects;
 	vec originCam(3);
 	vec originLight(3);
 	vec intensLight(3);
+	vec sphereCenter(3);
+	vec vertA(3);
+	vec vertB(3);
+	vec vertC(3);
 	int sizeX, sizeY; 
 	FILE *arqConfig = NULL;
 	FILE *arq = NULL;
+	vec d;
+	d << 0.0 << 0.0 << 255.0;
+	vec au;
+	au << 0.0 << 0.0 << 220.0;
 
 	if (argc < 2) {
 		cout << "Passe como parâmetro o arquivo de configurações!" << endl;
@@ -56,6 +66,15 @@ int main(int argc, char **argv) {
 
 		if (type == 'o') {
 			fscanf(arqConfig, "%s\n", nomeArqObj);
+			arq = fopen(nomeArqObj, "r");
+			objects = cena->readObjects(arq);
+
+			for(int i = 0; i < objects.size(); i++){
+				for(int j = 0; j < objects[i]->getTriangs().size(); j++){
+					cena->addObjects(objects[i]->getTriangs()[j]);
+				}
+			}
+
 			//cout << nomeArqObj << endl;
 		}
 
@@ -65,6 +84,22 @@ int main(int argc, char **argv) {
 			//cout << nomeArqSaida << endl;
 		}
 
+		if(type == 'e'){
+			fscanf(arqConfig, " %lf %lf %lf %lf\n", &sphereCenter[0], &sphereCenter[1], &sphereCenter[2],&sphereRay);
+			Sphere* sphere = new Sphere(sphereRay,sphereCenter, d, au);
+			cena->addObjects(sphere);
+		}
+		/*
+		if(type == 't'){
+			fscanf(arqConfig, " %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", &vertA[0], &vertA[1], &vertA[2], &vertB[0], &vertB[1], &vertB[2], &vertC[0], &vertC[1], &vertC[2]);		
+			Triangle* triangle = new Triangle(vertA, vertB, vertC);
+			triangle->setColors(d, au);
+			cena->addObjects(triangle);
+		}
+		*/
+
+
+
 	}
 
 	if (lights.size() == 0) {
@@ -72,8 +107,6 @@ int main(int argc, char **argv) {
 		lights.push_back(light);
 	}
 
-	arq = fopen(nomeArqObj, "r");
-	cena->readObjects(arq);
 	cena->renderizar(originCam, sizeX, sizeY, lights, nomeArqSaida);
 
 	return 0;
