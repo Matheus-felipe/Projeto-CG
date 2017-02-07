@@ -69,6 +69,7 @@ vector <Object*>Cena::readObjects(FILE *arqObjects) {
 			sscanf(linha, "%s %s", tipo, nomeMaterial);
 		}
 		else if (strcmp(tipo, "dColor") == 0) {
+			cout << "color" << endl;
 			sscanf(linha, "%*s %lf %lf %lf", &dColor[0], &dColor[1], &dColor[2]);
 		}
 		else if (strcmp(tipo, "eColor") == 0) {
@@ -129,7 +130,7 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 			director = k * matrizPixel;
 
 			colidiu = false;
-			//Object objtAtual = NULL;
+			Renderable *objtAtual = NULL;
  			
 			for(int l = 0; l < this->objects.size(); l++){
 				//cout << "Entrou dentro desse" << endl;				
@@ -141,69 +142,60 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 						distanceMenor = distance;
 						p = l;
 						menorNormal = normal;
+						objtAtual = objects[l];
 					}
 				}	
 			}
 
-			if(colidiu){
-			//objtAtual = objects[p];
-			vec originIntersect;
-			vec intersect;
-			int quantObjects = 0;
-			originIntersect = origin+(director*distanceMenor);
-			vec tempColor;
-			tempColor << 0.0 << 0.0 << 0.0;
-			for (int j = 0; j < lights.size(); j++) { //verificando todas as luzes
-
-				intersect = (lights[j].getOrigin())-originIntersect;
+			if(colidiu){ 
 				bool sombra = false;
-				
-				for (int i = 0; i < this->objects.size(); i++) { // verificando todos os objetos
-					
-					if (this->objects[i]->colision(originIntersect, intersect, &distance, normal)) { // verifica se o raio de interseção
+				vec intersect;
+				vec directorToLight;
+				int quantObjects = 0;
+				vec tempColor;
+				tempColor << 0.0 << 0.0 << 0.0;
 
-						if (distance == 0.0 || distance < 0.0) {
-							 continue;
+				for (int j = 0; j < lights.size(); j++) { //verificando todas as luzes
+
+					intersect = origin + director * distanceMenor;
+					directorToLight = lights[j].getOrigin() - intersect;
+					normalise(directorToLight);
+					normalise(intersect);
+					sombra = false;
+
+					for (int i = 0; i < this->objects.size(); i++) { // verificando todos os objetos
+						
+						if (this->objects[i]->colision(intersect, directorToLight, &distance, normal)) { // verifica se o raio de interseção
+							
+							if (objtAtual == objects[i]) continue;
+
+							sombra = true;
+							break;
 						}
-
-                        sombra = true;
-                        ++quantObjects;
-						break;
 					}
 
+					if(sombra == false){
+						//cout << "sou uma luzinha!" << endl;
+						vec v;
+						v = -directorToLight;
+						normalise(v);
+						tempColor += objtAtual->shading(lights[j], intersect, v, menorNormal);	
+					}
 				}
 
-				if(sombra == false){
-							vec v;
-							v = -director;
-							tempColor += this->objects[p]->shading(lights[j], originIntersect, v, menorNormal);	
+				if (sombra) {
+					//cout << "Oi sou uma sombra!" << endl;
+					fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
 				}
+
+				else {
+					fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
+				}
+
 			}
-
-			if (quantObjects == lights.size()) {
-				//sombra
-				cout << "Dayvid gay" << endl;
-				fprintf(arq, "0 0 0 ");
-
-			}else{
-				fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
-			}
-
-			/*
-	
-
-							vec v;
-							v = -director;
-							tempColor += this->objects[p]->shading(lights[j], originIntersect, v, menorNormal);	
-							
-							fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
-
-
-			*/
-
-			}else {
+			else {
 				//cout << "nao colidiu" << endl;
-				fprintf(arq, "255 255 255 ");
+				fprintf(arq, "30 30 30 ");
 			}
 		}
 	}	

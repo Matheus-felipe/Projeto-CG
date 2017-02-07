@@ -16,6 +16,8 @@ class Renderable{
 	public:
 		virtual bool colision(vec, vec, double *, vec&) = 0;
 		virtual vec shading(Light light , vec , vec , vec) = 0;
+		virtual vec getDifuseColor() = 0;
+		virtual vec getEspecColor() = 0;
 };
 
 class Sphere : public Renderable {

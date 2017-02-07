@@ -20,9 +20,7 @@ int main(int argc, char **argv) {
 	FILE *arqConfig = NULL;
 	FILE *arq = NULL;
 	vec d;
-	d << 0.0 << 0.0 << 255.0;
 	vec au;
-	au << 0.0 << 0.0 << 220.0;
 
 	if (argc < 2) {
 		cout << "Passe como parâmetro o arquivo de configurações!" << endl;
@@ -40,6 +38,8 @@ int main(int argc, char **argv) {
 	originCam << 0.0 << 0.0 << 0.0;
 	originLight << 0.0 << 0.0 << 0.1;
 	intensLight << 0.5 << 0.5 << 0.5;
+	d << 51.0 << 51.0 << 51.0;
+	au << 51.0 << 51.0 << 51.0;
 	sizeX = 800;
 	sizeY = 600;
 
@@ -85,7 +85,8 @@ int main(int argc, char **argv) {
 		}
 
 		if(type == 'e'){
-			fscanf(arqConfig, " %lf %lf %lf %lf\n", &sphereCenter[0], &sphereCenter[1], &sphereCenter[2],&sphereRay);
+			fscanf(arqConfig, " %lf %lf %lf %lf %lf %lf %lf\n", &sphereCenter[0], &sphereCenter[1], &sphereCenter[2], &sphereRay, &d[0], &d[1], &d[2]);
+			au = d;
 			Sphere* sphere = new Sphere(sphereRay,sphereCenter, d, au);
 			cena->addObjects(sphere);
 		}
@@ -102,6 +103,7 @@ int main(int argc, char **argv) {
 
 	}
 
+	//default
 	if (lights.size() == 0) {
 		Light light(originLight, intensLight);
 		lights.push_back(light);
