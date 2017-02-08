@@ -5,7 +5,7 @@ void Cena::addObjects(Renderable* rend) {
 	this->objects.push_back(rend);
 }
 
-vector <Object*>Cena::readObjects(FILE *arqObjects) {
+vector <Object*>Cena::readObjects(FILE *arqObjects, double pP) {
 
 	char linha[256], tipo[16], nomeMaterial[32];
 	int qtdVertices = 0;
@@ -56,7 +56,8 @@ vector <Object*>Cena::readObjects(FILE *arqObjects) {
 											objt->getVertice(vert3),
 											objt->getNormal(norm1),
 											objt->getNormal(norm2),
-											objt->getNormal(norm3));
+											objt->getNormal(norm3),
+											pP);
 			triang->setColors(dColor, eColor);
 			objt->addTriang(triang);
 		}
@@ -178,22 +179,14 @@ void Cena::renderizar(vec origin, int w, int h, vector <Light> lights, char *nom
 						//cout << "sou uma luzinha!" << endl;
 						vec v;
 						v = -directorToLight;
-						normalise(v);
+						v = normalise(v);
 						tempColor += objtAtual->shading(lights[j], intersect, v, menorNormal);	
 					}
 				}
-
-				if (sombra) {
 					//cout << "Oi sou uma sombra!" << endl;
 					fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
-				}
 
-				else {
-					fprintf(arq, "%d %d %d ",(int)tempColor[0], (int)tempColor[1], (int)tempColor[2]);
-				}
-
-			}
-			else {
+			}else {
 				//cout << "nao colidiu" << endl;
 				fprintf(arq, "30 30 30 ");
 			}

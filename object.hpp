@@ -29,7 +29,7 @@ class Sphere : public Renderable {
 		double p;
 	public:
 
-	Sphere(double, vec, vec, vec);
+	Sphere(double, vec, vec, vec, double);
 
 	bool colision(vec, vec, double *, vec& normal);
 	vec getDifuseColor();
@@ -52,7 +52,7 @@ class Triangle : public Renderable {
 
 		double alpha, beta, gama,p;
 
-		Triangle(vec pA, vec pB , vec pC, vec pNa, vec pNb, vec pNc);
+		Triangle(vec pA, vec pB , vec pC, vec pNa, vec pNb, vec pNc, double pP);
 		Triangle(vec pA, vec pB , vec pC);
 		bool colision(vec origin, vec coordImg, double *distance, vec& normal);
 		vec calcNormal();

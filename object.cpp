@@ -1,10 +1,11 @@
 #include "object.hpp"
 
-Sphere::Sphere(double pRay, vec pCenter, vec pDifuseColor, vec pEspecColor){
+Sphere::Sphere(double pRay, vec pCenter, vec pDifuseColor, vec pEspecColor, double pP){
 		this->ray = pRay;
 		this->center = pCenter;
 		this->difuseColor = pDifuseColor;
 		this->especColor = pEspecColor;
+		this->p = pP;
 };
 
 vec Sphere::shading(Light light, vec intersect, vec v, vec normal){
@@ -19,8 +20,8 @@ vec Sphere::shading(Light light, vec intersect, vec v, vec normal){
 
 		Li = (light.getOrigin() - intersect);
 		h = v + Li;
-		normalise(h);
-		normalise(Li);
+		h = normalise(h);
+		Li = normalise(Li);
 		max1 = (dot(normal,Li) > 0.0) ? dot(normal,Li) : 0.0;
 		max2 = (dot(normal,h) > 0.0) ? dot(normal,h) : 0.0; 
 		L = (((this->difuseColor%light.getIntensity()) * max1) + ((this->especColor%light.getIntensity())) * pow(max2,this->p));
@@ -63,24 +64,25 @@ bool Sphere::colision(vec origin, vec coordImg, double *distance, vec& normal){
 		if(delta < 0){
 			return false;
 		}else{
-			normal = (coordImg - this->center) / this->ray;
 
 			t1 = (-b + sqrt(delta)) / 2*a;
 			t2 = (-b - sqrt(delta)) / 2*a;
 
 			(*distance) = (t1 < t2) ? t1 : t2; 
-			
+			normal = (origin + (coordImg*(*distance)) - this->center) / this->ray;
+
 			return true;
 		}
 };	
 
-Triangle::Triangle(vec pA, vec pB , vec pC, vec pNa, vec pNb, vec pNc){
+Triangle::Triangle(vec pA, vec pB , vec pC, vec pNa, vec pNb, vec pNc, double pP){
 			this->a = pA;
 			this->b = pB;
 			this->c = pC;
 			this->nA = pNa;
 			this->nB = pNb;
 			this->nC = pNc;
+			this->p = pP;
 };
 
 Triangle::Triangle(vec pA, vec pB , vec pC){
@@ -155,7 +157,7 @@ vec Triangle::calcNormal(){
 			vec n;
 
 			n = ((this->alpha)*(this->nA)) + ((this->beta)*(this->nB)) + ((this->gama)*(this->nC));
-			normalise(n);
+			n = normalise(n);
 			return n;
 }
 
@@ -172,13 +174,13 @@ vec Triangle::shading(Light light, vec intersect, vec v, vec normal){
 	vec nLi;
 	vec nH;
 	double max1, max2;
-	normalise(v);
+	//v = normalise(v);
 
 
 		Li = (light.getOrigin() - intersect);
 		h = v + Li;
-		normalise(h);
-		normalise(Li);
+		h = normalise(h);
+		Li = normalise(Li);
 		max1 = (dot(normal,Li) > 0.0) ? dot(normal,Li) : 0.0;
 		max2 = (dot(normal,h) > 0.0) ? dot(normal,h) : 0.0; 
 		L = (((this->difuseColor%light.getIntensity()) * max1) + ((this->especColor%light.getIntensity())) * pow(max2,this->p));

@@ -10,7 +10,7 @@ class Cena {
 	public:
 		//vector getObjects();
 		void addObjects(Renderable *);
-		vector <Object*>readObjects(FILE *arq);
+		vector <Object*>readObjects(FILE *arq, double);
 		void renderizar(vec, int, int , vector <Light>, char *);	
 };
 

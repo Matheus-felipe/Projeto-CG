@@ -6,6 +6,7 @@ int main(int argc, char **argv) {
 	char nomeArqObj[32];
 	char nomeArqSaida[32];
 	double sphereRay = 0.0;
+	double p = 0.0; //Expoente de Phong
 	Cena *cena = new Cena();
 	vector <Light> lights;
 	vector <Object*> objects;
@@ -65,9 +66,9 @@ int main(int argc, char **argv) {
 		}
 
 		if (type == 'o') {
-			fscanf(arqConfig, "%s\n", nomeArqObj);
+			fscanf(arqConfig, "%s %lf\n", nomeArqObj, &p);
 			arq = fopen(nomeArqObj, "r");
-			objects = cena->readObjects(arq);
+			objects = cena->readObjects(arq,p);
 
 			for(int i = 0; i < objects.size(); i++){
 				for(int j = 0; j < objects[i]->getTriangs().size(); j++){
@@ -85,9 +86,8 @@ int main(int argc, char **argv) {
 		}
 
 		if(type == 'e'){
-			fscanf(arqConfig, " %lf %lf %lf %lf %lf %lf %lf\n", &sphereCenter[0], &sphereCenter[1], &sphereCenter[2], &sphereRay, &d[0], &d[1], &d[2]);
-			au = d;
-			Sphere* sphere = new Sphere(sphereRay,sphereCenter, d, au);
+			fscanf(arqConfig, " %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", &sphereCenter[0], &sphereCenter[1], &sphereCenter[2], &sphereRay, &d[0], &d[1], &d[2], &au[0], &au[1], &au[3], &p);
+			Sphere* sphere = new Sphere(sphereRay,sphereCenter, d, au, p);
 			cena->addObjects(sphere);
 		}
 		/*
