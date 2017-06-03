@@ -1,7 +1,7 @@
 RayTracer
 ==============
 
-Projeto referente à disciplina de Computação Gráfica da Universidade Estadual de Pernambuco.
+Projeto referente à disciplina de Computação Gráfica da Universidade de Pernambuco.
 
 ### Para usar
 
