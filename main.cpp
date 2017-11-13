@@ -1,6 +1,7 @@
 #include "cena.hpp"
 #include "light.hpp"
 
+
 int main(int argc, char **argv) {
 	char type;
 	char nomeArqObj[32];
